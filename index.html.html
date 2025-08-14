@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<title>Comprovador de contrasenyes</title>
+<style>
+    body {
+        background-color: black;
+        color: lime;
+        font-family: 'Courier New', monospace;
+        text-align: center;
+        padding-top: 20px;
+    }
+    input, button {
+        font-size: 16px;
+        padding: 5px;
+        border: none;
+        outline: none;
+    }
+    button {
+        background-color: black;
+        color: lime;
+        border: 1px solid lime;
+        cursor: pointer;
+        margin: 5px;
+    }
+    .progress {
+        width: 80%;
+        height: 20px;
+        background-color: #111;
+        margin: 15px auto;
+        border: 1px solid lime;
+    }
+    .progress-bar {
+        height: 100%;
+        width: 0;
+        background-color: lime;
+        transition: width 0.3s;
+    }
+    #resultat {
+        margin-top: 10px;
+        min-height: 20px;
+    }
+    #recomanacions {
+        margin-top: 10px;
+        color: #0f0;
+        font-size: 14px;
+        text-align: left;
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    footer {
+        margin-top: 20px;
+        font-size: 12px;
+        color: #0f0;
+    }
+</style>
+</head>
+<body>
+<h1>Comprovador de contrasenyes</h1>
+<div>
+    <input type="password" id="contrasenya" placeholder="Introdueix la contrasenya">
+    <button onclick="toggleMostrar()" id="btnMostrar">👁</button>
+</div>
+<button onclick="iniciarAnalisi()">Comprovar</button>
+<div class="progress"><div class="progress-bar" id="barra"></div></div>
+<p id="resultat"></p>
+<div id="recomanacions"></div>
+<div>
+    <button onclick="netejar()">Netejar</button>
+</div>
+<footer>© 2025 Comprovador de Contrasenyes. Tots els drets reservats.</footer>
+
+<script>
+// JavaScript ofuscado y minificado para proteger el código
+!function(){function e(e){document.getElementById("resultat").innerText="[Analitzant contrasenya...]";document.getElementById("recomanacions").innerHTML="",setTimeout(a,800)}function a(){var e=document.getElementById("contrasenya").value,t=0,n=[];/^.{12,15}$/.test(e)&&t++;t+=/[A-Z]/.test(e)?1:(n.push("Afegeix lletres majúscules."),0);t+=/[a-z]/.test(e)?1:(n.push("Afegeix lletres minúscules."),0);t+=/\d/.test(e)?1:(n.push("Inclou números."),0);t+=/[^A-Za-z0-9]/.test(e)?1:(n.push("Inclou caràcters especials."),0);var r=["password","123456","qwerty","nom","producte","personatge"];r.includes(e.toLowerCase())?n.push("Evita paraules comunes."):t++;document.getElementById("barra").style.width=100*t/6+"%";var o="";o=t<=2?"[Molt feble]":t<=4?"[Mitjana]":"[Forta]",document.getElementById("resultat").innerText=o,n.length>0&&(document.getElementById("recomanacions").innerHTML="<b>Consells:</b><br>"+n.join("<br>"))}window.iniciarAnalisi=e,window.toggleMostrar=function(){var e=document.getElementById("contrasenya"),a=document.getElementById("btnMostrar");"password"===e.type?(e.type="text",a.textContent="🙈"):(e.type="password",a.textContent="👁")},window.netejar=function(){document.getElementById("contrasenya").value="",document.getElementById("barra").style.width="0",document.getElementById("resultat").innerText="",document.getElementById("recomanacions").innerHTML=""}()}();
+</script>
+</body>
+</html>
