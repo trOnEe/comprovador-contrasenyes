@@ -6,75 +6,118 @@
 <style>
     body {
         background-color: black;
-        color: lime;
+        color: #00FF00;
         font-family: 'Courier New', monospace;
-        text-align: center;
-        padding-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
     }
-    input, button {
-        font-size: 16px;
-        padding: 5px;
-        border: none;
-        outline: none;
+    input[type="password"], input[type="text"] {
+        width: 300px;
+        padding: 10px;
+        margin: 10px;
+        background-color: #111;
+        color: #00FF00;
+        border: 1px solid #00FF00;
     }
     button {
-        background-color: black;
-        color: lime;
-        border: 1px solid lime;
-        cursor: pointer;
+        padding: 10px 20px;
         margin: 5px;
-    }
-    .progress {
-        width: 80%;
-        height: 20px;
         background-color: #111;
-        margin: 15px auto;
-        border: 1px solid lime;
+        color: #00FF00;
+        border: 1px solid #00FF00;
+        cursor: pointer;
     }
-    .progress-bar {
+    button:hover {
+        background-color: #00FF00;
+        color: black;
+    }
+    #progress {
+        width: 300px;
+        height: 20px;
+        border: 1px solid #00FF00;
+        margin: 10px;
+        background-color: #111;
+    }
+    #progress-bar {
         height: 100%;
-        width: 0;
-        background-color: lime;
-        transition: width 0.3s;
+        width: 0%;
+        background-color: #00FF00;
     }
-    #resultat {
+    #recommendations {
         margin-top: 10px;
-        min-height: 20px;
-    }
-    #recomanacions {
-        margin-top: 10px;
-        color: #0f0;
-        font-size: 14px;
-        text-align: left;
-        width: 80%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    footer {
-        margin-top: 20px;
-        font-size: 12px;
-        color: #0f0;
     }
 </style>
 </head>
 <body>
 <h1>Comprovador de contrasenyes</h1>
 <div>
-    <input type="password" id="contrasenya" placeholder="Introdueix la contrasenya">
-    <button onclick="toggleMostrar()" id="btnMostrar">👁</button>
+    <input type="password" id="password" placeholder="Introdueix la contrasenya">
+    <button id="toggleEye">👁️</button>
 </div>
-<button onclick="iniciarAnalisi()">Comprovar</button>
-<div class="progress"><div class="progress-bar" id="barra"></div></div>
-<p id="resultat"></p>
-<div id="recomanacions"></div>
 <div>
-    <button onclick="netejar()">Netejar</button>
+    <button id="checkBtn">Comprovar</button>
+    <button id="clearBtn">Netejar</button>
 </div>
-<footer>© 2025 Comprovador de Contrasenyes. Tots els drets reservats.</footer>
+<div id="progress">
+    <div id="progress-bar"></div>
+</div>
+<div id="recommendations"></div>
 
 <script>
-// JavaScript ofuscado y minificado para proteger el código
-!function(){function e(e){document.getElementById("resultat").innerText="[Analitzant contrasenya...]";document.getElementById("recomanacions").innerHTML="",setTimeout(a,800)}function a(){var e=document.getElementById("contrasenya").value,t=0,n=[];/^.{12,15}$/.test(e)&&t++;t+=/[A-Z]/.test(e)?1:(n.push("Afegeix lletres majúscules."),0);t+=/[a-z]/.test(e)?1:(n.push("Afegeix lletres minúscules."),0);t+=/\d/.test(e)?1:(n.push("Inclou números."),0);t+=/[^A-Za-z0-9]/.test(e)?1:(n.push("Inclou caràcters especials."),0);var r=["password","123456","qwerty","nom","producte","personatge"];r.includes(e.toLowerCase())?n.push("Evita paraules comunes."):t++;document.getElementById("barra").style.width=100*t/6+"%";var o="";o=t<=2?"[Molt feble]":t<=4?"[Mitjana]":"[Forta]",document.getElementById("resultat").innerText=o,n.length>0&&(document.getElementById("recomanacions").innerHTML="<b>Consells:</b><br>"+n.join("<br>"))}window.iniciarAnalisi=e,window.toggleMostrar=function(){var e=document.getElementById("contrasenya"),a=document.getElementById("btnMostrar");"password"===e.type?(e.type="text",a.textContent="🙈"):(e.type="password",a.textContent="👁")},window.netejar=function(){document.getElementById("contrasenya").value="",document.getElementById("barra").style.width="0",document.getElementById("resultat").innerText="",document.getElementById("recomanacions").innerHTML=""}()}();
+const passwordInput = document.getElementById('password');
+const toggleEye = document.getElementById('toggleEye');
+const checkBtn = document.getElementById('checkBtn');
+const clearBtn = document.getElementById('clearBtn');
+const progressBar = document.getElementById('progress-bar');
+const recommendations = document.getElementById('recommendations');
+
+toggleEye.addEventListener('click', () => {
+    if(passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+    } else {
+        passwordInput.type = 'password';
+    }
+});
+
+clearBtn.addEventListener('click', () => {
+    passwordInput.value = '';
+    progressBar.style.width = '0%';
+    recommendations.innerHTML = '';
+});
+
+checkBtn.addEventListener('click', () => {
+    const pwd = passwordInput.value;
+    let score = 0;
+    let recom = [];
+
+    if(pwd.length >= 12 && pwd.length <= 15) score += 25;
+    else recom.push("La contrasenya ha de tenir entre 12 i 15 caràcters.");
+
+    if(/[a-z]/.test(pwd)) score += 15;
+    else recom.push("Inclou lletres minúscules.");
+
+    if(/[A-Z]/.test(pwd)) score += 15;
+    else recom.push("Inclou lletres majúscules.");
+
+    if(/[0-9]/.test(pwd)) score += 15;
+    else recom.push("Inclou números.");
+
+    if(/[^A-Za-z0-9]/.test(pwd) || /\s/.test(pwd)) score += 15;
+    else recom.push("Inclou caràcters especials o espais.");
+
+    const commonWords = ["password","123456","qwerty","abc123"];
+    if(!commonWords.some(word => pwd.toLowerCase().includes(word))) score += 15;
+    else recom.push("Evita paraules comuns o fàcilment endevinables.");
+
+    if(score > 100) score = 100;
+    progressBar.style.width = score + "%";
+
+    if(score === 100) recom = ["Contrasenya molt segura!"];
+    recommendations.innerHTML = recom.join("<br>");
+});
 </script>
 </body>
 </html>
